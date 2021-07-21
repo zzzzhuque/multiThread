@@ -35,7 +35,7 @@ public class Bank {
         bankLock.lock();
         try {
             while (accounts[from] < amount) {
-                sufficientFunds.await();
+                sufficientFunds.await();    // 条件变量
             }
             System.out.print(Thread.currentThread());
             accounts[from] -= amount;
@@ -53,7 +53,7 @@ public class Bank {
      * @return the total balance
      */
     public double getTotalBalance() {
-        bankLock.lock();
+        bankLock.lock();    // 重入锁
         try {
             double sum = 0;
             for (double a : accounts) {
