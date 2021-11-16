@@ -69,3 +69,38 @@ public class AddOne implements Runnable{
 内置锁可重入，当某个线程试图获得一个已经由它自己持有的锁，这个操作会成功。"重入"
 意味着获取锁的操作粒度是"线程"而不是"调用"。每个锁关联了一个获取计数器和一个所有
 者线程
+
+# 对象的共享
+
+## 可见性
+
+可见性是指一个线程对共享值的修改可被其他线程感知。但在缺少同步的情况下，编译器、
+处理器以及运行时对语句的执行顺序未知，比如第五行代码会比第四行代码先执行（这种现
+象称为重排序）
+
+这就使得下面的程序可能会持续循环，因为读线程可能永远看不到ready的值。也可能会输
+出0，因为可能ready先赋值，而number还没有被赋值
+
+```java
+public class NoVisibility {
+    private static boolean ready;
+    private static int number;
+
+    private static class ReaderThread implements Runnable {
+        @Override
+        public void run() {
+            while (!ready) {
+                // 使当前线程从运行状态变为就绪状态
+                Thread.yield();
+            }
+            System.out.println(number);
+        }
+    }
+
+    public static void main(String[] args) {
+        new ReaderThread().run();
+        number = 42;
+        ready = true;
+    }
+}
+```
