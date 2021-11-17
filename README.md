@@ -104,3 +104,12 @@ public class NoVisibility {
     }
 }
 ```
+
+## volatile
+
+java内存模型要求，变量的读取操作和写入操作都必须是原子操作，但对于非volatile
+类型的long和double变量，JVM允许将64位的读操作或写操作分解为两个32位的操作。
+所以在多线程中使用共享且可变的long、double是不安全的，除非用volatile声明，或者
+用锁保护起来。
+
+加锁机制既可以确保可见性又可以确保原子性，而volatile变量只能确保可见性。
