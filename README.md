@@ -113,3 +113,25 @@ java内存模型要求，变量的读取操作和写入操作都必须是原子�
 用锁保护起来。
 
 加锁机制既可以确保可见性又可以确保原子性，而volatile变量只能确保可见性。
+
+第一：使用volatile关键字会强制将修改的值立即写入主存；
+
+第二：使用volatile关键字的话，当线程2进行修改时，会导致线程1的工作内存中缓存变量stop
+的缓存行无效（反映到硬件层的话，就是CPU的L1或者L2缓存中对应的缓存行无效）；
+
+第三：由于线程1的工作内存中缓存变量stop的缓存行无效，所以线程1再次读取变量stop的值时
+会去主存读取。
+
+使用volatile的场景，状态标记量
+
+```java
+volatile boolean flag = false;
+ 
+while(!flag){
+    doSomething();
+}
+ 
+public void setFlag() {
+    flag = true;
+}
+```
