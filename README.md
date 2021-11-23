@@ -146,3 +146,29 @@ public void setFlag() {
     flag = true;
 }
 ```
+
+# 发布（Publish）和逸出（Escape）
+
+发布是指使对象能够在当前作用域之外的代码中使用，当某个不该发布的对象发布时，称为
+逸出
+
+```java
+class UnsafeStates {
+    private String[] states = new String[] {
+            "AK", "AL", ...
+    };
+    
+    public String[] getStates() {
+        return states;
+    }
+}
+```
+
+get的本意是获取私有变量的值，但如果得到的是引用，则这个私有变量有被窜改的风险。
+
+# 线程封闭
+
+如果仅在单线程内访问数据，就不需要同步，这种技术称为线程封闭（Thread Confinement）
+java提供ThreadLocal类实现线程封闭。
+
+Ad-hoc是指维护线程封闭性的职责完全由程序实现来承担，一般不使用。
