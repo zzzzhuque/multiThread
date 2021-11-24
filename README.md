@@ -166,9 +166,19 @@ class UnsafeStates {
 
 get的本意是获取私有变量的值，但如果得到的是引用，则这个私有变量有被窜改的风险。
 
+关于*当ThisEscape发布EventListener时，也隐含地发布了ThisEscape实例本身，因为在
+这个内部类的实例中包含了对ThisEscape实例的隐含引用。*
+
+在https://segmentfault.com/q/1010000007900854中有较完善的解释，因为内部类
+在构造的时候会把外部类的this作为隐式参数传进去，这就使得外部类还没有初始化完成，
+内部类可以拿着这个隐式this改变外部类的属性。
+
+规避方法是使用一个私有的构造函数和一个公共的静态工厂方法（Factory Method），从
+而避免不正确的构造过程
+
 # 线程封闭
 
 如果仅在单线程内访问数据，就不需要同步，这种技术称为线程封闭（Thread Confinement）
-java提供ThreadLocal类实现线程封闭。
+java提供栈封闭和ThreadLocal类实现线程封闭。
 
 Ad-hoc是指维护线程封闭性的职责完全由程序实现来承担，一般不使用。
